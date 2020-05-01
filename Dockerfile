@@ -1,10 +1,8 @@
 #-------------------------------------------------------------------------------------------------------------
-# Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License. See https://go.microsoft.com/fwlink/?linkid=2090316 for license information.
 #-------------------------------------------------------------------------------------------------------------
 
-# To fully customize the contents of this image, use the following Dockerfile as a base and add the RUN statement from this file:
-# https://github.com/microsoft/vscode-dev-containers/blob/v0.112.0/containers/debian-10-git/.devcontainer/Dockerfile
+# Using Ubuntu 16.04 as the base image
 FROM ubuntu:16.04
 
 # This Dockerfile's base image has a non-root user with sudo access. Use the "remoteUser"
@@ -31,24 +29,6 @@ RUN apt-get update \
     && if [ "$COMMON_SCRIPT_SHA" != "dev-mode" ]; then echo "$COMMON_SCRIPT_SHA /tmp/common-setup.sh" | sha256sum -c - ; fi \
     && /bin/bash /tmp/common-setup.sh "$INSTALL_ZSH" "$USERNAME" "$USER_UID" "$USER_GID" \
     && rm /tmp/common-setup.sh \
-    #
-    # Clean up
-    && apt-get autoremove -y \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
-
-# Configure apt and install packages
-RUN apt-get update \
-    #
-    # Install C++ tools
-    && apt-get -y install build-essential cmake cppcheck valgrind \
-    #
-    # [Optional] Update UID/GID if needed
-    && if [ "$USER_GID" != "1000" ] || [ "$USER_UID" != "1000" ]; then \
-    groupmod --gid $USER_GID $USERNAME \
-    && usermod --uid $USER_UID --gid $USER_GID $USERNAME \
-    && chown -R $USER_UID:$USER_GID /home/$USERNAME; \
-    fi \
     #
     # Clean up
     && apt-get autoremove -y \
