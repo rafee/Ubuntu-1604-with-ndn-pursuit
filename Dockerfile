@@ -29,9 +29,39 @@ RUN apt-get update \
     && if [ "$COMMON_SCRIPT_SHA" != "dev-mode" ]; then echo "$COMMON_SCRIPT_SHA /tmp/common-setup.sh" | sha256sum -c - ; fi \
     && /bin/bash /tmp/common-setup.sh "$INSTALL_ZSH" "$USERNAME" "$USER_UID" "$USER_GID" \
     && rm /tmp/common-setup.sh \
+
+# Configure apt and install ndn and pursuit
+# Install C++ tools
+RUN apt-get -y install build-essential cmake cppcheck valgrind libcpprest-dev libboost-all-dev pkg-config libsqlite3-dev \
     #
-    # Clean up
-    && apt-get autoremove -y \
+    # Clone ndn-cxx and install version suitable for 16.04
+    && git clone https://github.com/named-data/ndn-cxx \
+    && cd ndn-cxx \
+    && git checkout 9603325ba6e35a0b985c77e074b77e3a3e7030ea \
+    && ./waf configure \
+    && ./waf \
+    && ./waf install \
+    && ldconfig \
+    #
+    # Clean ndn-cxx
+    && cd .. && rm -rf ndn-cxx \
+
+#
+# Clone blackadder and install version suitable for 16.04
+RUN git clone https://github.com/kohler/click \
+    && cd click \
+    && ./configure --disable-linuxmodule \
+    && make && make install \
+    # clean click
+    && cd .. && rm -rf click \
+    && git clone https://github.com/rafee/blackadder \
+    && cd blackadder \
+    && ./make-all-libs.sh \
+    # clean blackadder
+    && cd .. && rm -rf blackadder \
+
+# Clean up apt
+RUN apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
