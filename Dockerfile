@@ -28,7 +28,7 @@ RUN apt-get update \
     && wget -q -O /tmp/common-setup.sh $COMMON_SCRIPT_SOURCE \
     && if [ "$COMMON_SCRIPT_SHA" != "dev-mode" ]; then echo "$COMMON_SCRIPT_SHA /tmp/common-setup.sh" | sha256sum -c - ; fi \
     && /bin/bash /tmp/common-setup.sh "$INSTALL_ZSH" "$USERNAME" "$USER_UID" "$USER_GID" \
-    && rm /tmp/common-setup.sh \
+    && rm /tmp/common-setup.sh
 
 # Configure apt and install ndn and pursuit
 # Install C++ tools
@@ -44,7 +44,7 @@ RUN apt-get -y install build-essential cmake cppcheck valgrind libcpprest-dev li
     && ldconfig \
     #
     # Clean ndn-cxx
-    && cd .. && rm -rf ndn-cxx \
+    && cd .. && rm -rf ndn-cxx
 
 #
 # Clone blackadder and install version suitable for 16.04
@@ -58,7 +58,7 @@ RUN git clone https://github.com/kohler/click \
     && cd blackadder \
     && ./make-all-libs.sh \
     # clean blackadder
-    && cd .. && rm -rf blackadder \
+    && cd .. && rm -rf blackadder
 
 # Clean up apt
 RUN apt-get autoremove -y \
