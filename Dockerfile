@@ -35,9 +35,10 @@ RUN apt-get update \
 RUN apt-get -y install build-essential cmake cppcheck valgrind libcpprest-dev libboost-all-dev pkg-config libsqlite3-dev \
     #
     # Clone ndn-cxx and install version suitable for 16.04
-    && git clone https://github.com/named-data/ndn-cxx \
-    && cd ndn-cxx \
-    && git checkout 9603325ba6e35a0b985c77e074b77e3a3e7030ea \
+    && wget https://github.com/named-data/ndn-cxx/archive/ndn-cxx-0.7.0.tar.gz \
+    && tar -xvf ndn-cxx-0.7.0.tar.gz \
+    && cd ndn-cxx-ndn-cxx-0.7.0 \
+    # && git checkout 9603325ba6e35a0b985c77e074b77e3a3e7030ea \
     && ./waf configure \
     && ./waf \
     && ./waf install \
