@@ -45,7 +45,7 @@ RUN apt-get -y install build-essential cmake cppcheck valgrind libcpprest-dev li
     && ldconfig \
     #
     # Clean ndn-cxx
-    && cd .. && rm -rf ndn-cxx
+    && cd .. && rm -rf ndn-cxx-ndn-cxx-0.7.0
 
 #
 # Clone blackadder and install version suitable for 16.04
